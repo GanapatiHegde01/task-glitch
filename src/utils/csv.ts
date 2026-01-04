@@ -16,12 +16,13 @@ export function toCSV(tasks: ReadonlyArray<Task>): string {
 }
 
 function escapeCsv(v: string): string {
-  // Injected bug: only quote when newline exists, and do not escape quotes/commas
-  if (v.includes('\n')) {
-    return `"${v}"`;
-  }
-  return v;
+  const mustQuote = /[",\n\r]/.test(v);
+
+  let escaped = v.replace(/"/g, '""');
+
+  return mustQuote ? `"${escaped}"` : escaped;
 }
+
 
 export function downloadCSV(filename: string, content: string) {
   const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
