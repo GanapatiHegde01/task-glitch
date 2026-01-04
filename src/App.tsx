@@ -89,14 +89,17 @@ function AppContent() {
           {error && <Alert severity="error">{error}</Alert>}
           {!loading && !error && (
             <MetricsBar
-              metricsOverride={{
-                totalRevenue: computeTotalRevenue(filtered),
-                totalTimeTaken: filtered.reduce((s, t) => s + t.timeTaken, 0),
-                timeEfficiencyPct: computeTimeEfficiency(filtered),
-                revenuePerHour: computeRevenuePerHour(filtered),
-                averageROI: computeAverageROI(filtered),
-                performanceGrade: computePerformanceGrade(computeAverageROI(filtered)),
-              }}
+              metricsOverride={(() => {
+                const avgROI = computeAverageROI(filtered);
+                return {
+                  totalRevenue: computeTotalRevenue(filtered),
+                  totalTimeTaken: filtered.reduce((s, t) => s + t.timeTaken, 0),
+                  timeEfficiencyPct: computeTimeEfficiency(filtered),
+                  revenuePerHour: computeRevenuePerHour(filtered),
+                  averageROI: avgROI,
+                  performanceGrade: computePerformanceGrade(avgROI),
+                };
+              })()}
             />
           )}
           {!loading && !error && (

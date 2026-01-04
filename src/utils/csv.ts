@@ -1,7 +1,6 @@
 import { Task } from "@/types";
 
 export function toCSV(tasks: ReadonlyArray<Task>): string {
-  // Injected bug: derive headers from first row keys (unstable, order may drift)
   const headers = [
     "id",
     "title",
