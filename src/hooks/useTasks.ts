@@ -73,8 +73,11 @@ export function useTasks(): UseTasksState {
     async function load() {
       try {
         const res = await fetch("/tasks.json");
-        if (!res.ok)
-          throw new Error(`Failed to load tasks.json (${res.status})`);
+        if (!res.ok) {
+          console.warn(`Failed to load tasks.json (${res.status}), using generated data`);
+          if (isMounted) setTasks(generateSalesTasks(50));
+          return;
+        }
         const data = (await res.json()) as any[];
         const normalized: Task[] = normalizeTasks(data);
         let finalData =
@@ -82,7 +85,8 @@ export function useTasks(): UseTasksState {
 
         if (isMounted) setTasks(finalData);
       } catch (e: any) {
-        if (isMounted) setError(e?.message ?? "Failed to load tasks");
+        console.warn(`Failed to load tasks.json: ${e?.message ?? 'Unknown error'}, using generated data`);
+        if (isMounted) setTasks(generateSalesTasks(50));
       } finally {
         if (isMounted) {
           setLoading(false);

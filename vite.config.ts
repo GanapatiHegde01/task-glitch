@@ -1,13 +1,14 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import path from 'node:path';
+import { resolve } from 'path';
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
+  base: command === 'build' ? '/task-glitch/' : '/', 
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': resolve(__dirname, 'src'),
     },
   },
-});
+}));
 
