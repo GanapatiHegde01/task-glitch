@@ -4,7 +4,7 @@ import { resolve } from 'path';
 
 export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: command === 'build' ? '/task-glitch/' : '/', 
+  base: command === 'build' ? '/' : '/',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
